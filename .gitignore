@@ -9,6 +9,13 @@
 /[Bb]uilds/
 /[Ll]ogs/
 /[Mm]emoryCaptures/
+BoardRoyale/[Ll]ibrary/
+BoardRoyale/[Tt]emp/
+BoardRoyale/[Oo]bj/
+BoardRoyale/[Bb]uild/
+BoardRoyale/[Bb]uilds/
+BoardRoyale/[Ll]ogs/
+BoardRoyale/[Mm]emoryCaptures/
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !/[Aa]ssets/**/*.meta
