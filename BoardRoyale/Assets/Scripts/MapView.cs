@@ -10,9 +10,13 @@ public class MapView : MonoBehaviour
     [SerializeField] GameObject CardSquare;
     [SerializeField] GameObject BossSquare;
     [SerializeField] GameObject NormalSquare;
+    [SerializeField] GameObject betweenSquareGuide;
     [SerializeField] Sprite LoseSquareSprite;
-    List<GameObject> MapSquares=new List<GameObject>();
-    List<Vector3> SquarePositions = new List<Vector3>() 
+    Vector3 squareExtRate = new Vector3(0.015f, -0.015f);
+    Vector3 squareOffset = new Vector3(-10, 4.5f);
+
+    List<GameObject> MapSquares = new List<GameObject>();
+    List<Vector3> SquarePositions = new List<Vector3>()
     { new Vector3(600, 121), new Vector3(567,104),new Vector3(534,92),new Vector3(466,68),new Vector3(394,43),
     new Vector3(350,30),new Vector3(293,24),new Vector3(224,46),new Vector3(198,82),new Vector3(199,134),
     new Vector3(219,184),new Vector3(248,228),new Vector3(299,257),new Vector3(355,266),new Vector3(430,239),
@@ -38,16 +42,14 @@ public class MapView : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        Vector3 squareExtRate = new Vector3(0.015f,-0.015f);
-        Vector3 squareOffset = new Vector3(-10,4.5f);
         for (int i = 0; i < 82; i++)
         {
-            SquarePositions[i]=new Vector3(SquarePositions[i].x*squareExtRate.x, SquarePositions[i].y * squareExtRate.y);
+            SquarePositions[i] = Vector3.Scale(SquarePositions[i], squareExtRate);
             SquarePositions[i] += squareOffset;
             switch (i)
             {
                 case 0:
-                    GameObject obj = Instantiate(StartSquare,SquarePositions[i],Quaternion.identity);
+                    GameObject obj = Instantiate(StartSquare, SquarePositions[i], Quaternion.identity);
                     MapSquares.Add(obj);
                     break;
                 case 1:
@@ -120,6 +122,7 @@ public class MapView : MonoBehaviour
                     break;
                 case 18:
                     obj = Instantiate(CrossSquare, SquarePositions[i], Quaternion.identity);
+                    obj.SetActive(false);
                     MapSquares.Add(obj);
                     break;
                 case 19:
@@ -216,6 +219,7 @@ public class MapView : MonoBehaviour
                     break;
                 case 42:
                     obj = Instantiate(CrossSquare, SquarePositions[i], Quaternion.identity);
+                    obj.SetActive(false);
                     MapSquares.Add(obj);
                     break;
                 case 43:
@@ -232,6 +236,7 @@ public class MapView : MonoBehaviour
                     break;
                 case 46:
                     obj = Instantiate(StartSquare, SquarePositions[i], Quaternion.identity);
+                    obj.SetActive(false);
                     MapSquares.Add(obj);
                     break;
                 case 47:
@@ -264,6 +269,7 @@ public class MapView : MonoBehaviour
                     break;
                 case 54:
                     obj = Instantiate(CrossSquare, SquarePositions[i], Quaternion.identity);
+                    obj.SetActive(false);
                     MapSquares.Add(obj);
                     break;
                 case 55:
@@ -272,6 +278,7 @@ public class MapView : MonoBehaviour
                     break;
                 case 56:
                     obj = Instantiate(CrossSquare, SquarePositions[i], Quaternion.identity);
+                    obj.SetActive(false);
                     MapSquares.Add(obj);
                     break;
                 case 57:
@@ -304,10 +311,12 @@ public class MapView : MonoBehaviour
                     break;
                 case 64:
                     obj = Instantiate(CrossSquare, SquarePositions[i], Quaternion.identity);
+                    obj.SetActive(false);
                     MapSquares.Add(obj);
                     break;
                 case 65:
                     obj = Instantiate(CrossSquare, SquarePositions[i], Quaternion.identity);
+                    obj.SetActive(false);
                     MapSquares.Add(obj);
                     break;
                 case 66:
@@ -324,6 +333,7 @@ public class MapView : MonoBehaviour
                     break;
                 case 69:
                     obj = Instantiate(CrossSquare, SquarePositions[i], Quaternion.identity);
+                    obj.SetActive(false);
                     MapSquares.Add(obj);
                     break;
                 case 70:
@@ -352,6 +362,7 @@ public class MapView : MonoBehaviour
                     break;
                 case 76:
                     obj = Instantiate(CrossSquare, SquarePositions[i], Quaternion.identity);
+                    obj.SetActive(false);
                     MapSquares.Add(obj);
                     break;
                 case 77:
@@ -360,6 +371,7 @@ public class MapView : MonoBehaviour
                     break;
                 case 78:
                     obj = Instantiate(CrossSquare, SquarePositions[i], Quaternion.identity);
+                    obj.SetActive(false);
                     MapSquares.Add(obj);
                     break;
                 case 79:
@@ -376,19 +388,81 @@ public class MapView : MonoBehaviour
                     break;
             }
         }
+        Invoke("SetCrossMarkAll", 0.01f);
+        Invoke("SetRouteGuide", 0.01f);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
     public Vector3 GetPlayerPositionById(int squareId)
     {
-        return SquarePositions[squareId]+new Vector3(0,0.05f);
+        return SquarePositions[squareId] + new Vector3(0, 0.05f);
+    }
+    public Vector3 GetTwoSquareCoordinate(int fromSquareId, int toSquareId)
+    {
+        return (SquarePositions[toSquareId] - SquarePositions[fromSquareId]);
     }
     public void LoseSquare(int squareId)
     {
-        
+
+    }
+    void SetCrossMarkAll()
+    {
+        //SetCrossMark(MapSquares[0], 0);
+        SetCrossMark(MapSquares[2], 2);
+        SetCrossMark(MapSquares[13], 13);
+        SetCrossMark(MapSquares[16], 16);
+        SetCrossMark(MapSquares[24], 24);
+        SetCrossMark(MapSquares[25], 25);
+        SetCrossMark(MapSquares[30], 30);
+        SetCrossMark(MapSquares[40], 40);
+        SetCrossMark(MapSquares[48], 48);
+        SetCrossMark(MapSquares[58], 58);
+    }
+    public void SetCrossMark(GameObject crossSquare, int squareId)
+    {
+        int count = 0;
+        foreach (SpriteRenderer crossMark in crossSquare.GetComponentsInChildren<SpriteRenderer>())
+        {
+            count++;
+            GameMap.MapCross mapCross = GameMap.Instance.GetSquareById(squareId).cross;
+            Vector3 tempCoordinate;
+            if (count == 2)
+            {
+                tempCoordinate = MapView.Instance.GetTwoSquareCoordinate(GameMap.Instance.GetnextSquare(mapCross.cross1LoopId, mapCross.cross1squareId, 1),
+                     GameMap.Instance.GetnextSquare(mapCross.cross1LoopId, mapCross.cross1squareId, -1));
+            }
+            else
+            {
+                tempCoordinate = MapView.Instance.GetTwoSquareCoordinate(GameMap.Instance.GetnextSquare(mapCross.cross2LoopId, mapCross.cross2squareId, 1),
+                     GameMap.Instance.GetnextSquare(mapCross.cross2LoopId, mapCross.cross2squareId, -1));
+            }
+            crossMark.gameObject.transform.rotation =
+                 Quaternion.Euler(0, 0, Mathf.Atan2(tempCoordinate.y, tempCoordinate.x) * Mathf.Rad2Deg);
+
+        }
+    }
+    void SetRouteGuide()
+    {
+        Vector3 tempCoordinate;
+        for (int i = 0; i < 82; i++)
+        {
+            if (i <= 45)
+            {
+                tempCoordinate = GetTwoSquareCoordinate(i, GameMap.Instance.GetnextSquare(1, i, 1));
+
+                GameObject obj = Instantiate(betweenSquareGuide, Vector3.Lerp(MapSquares[i].transform.position, MapSquares[GameMap.Instance.GetnextSquare(1, i, 1)].transform.position, 0.5f)
+                    , Quaternion.Euler(0, 0, Mathf.Atan2(tempCoordinate.y, tempCoordinate.x) * Mathf.Rad2Deg));
+            }
+            else
+            {
+                tempCoordinate = GetTwoSquareCoordinate(i, GameMap.Instance.GetnextSquare(2, i, 1));
+                GameObject obj = Instantiate(betweenSquareGuide, Vector3.Lerp(MapSquares[i].transform.position, MapSquares[GameMap.Instance.GetnextSquare(2, i, 1)].transform.position, 0.5f)
+                    , Quaternion.Euler(0, 0, Mathf.Atan2(tempCoordinate.y, tempCoordinate.x) * Mathf.Rad2Deg));
+            }
+        }
     }
 }

@@ -1333,8 +1333,8 @@ GameObject:
   - component: {fileID: 1913183181}
   - component: {fileID: 1913183180}
   - component: {fileID: 1913183183}
-  - component: {fileID: 1913183184}
   - component: {fileID: 1913183185}
+  - component: {fileID: 1913183184}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -1363,6 +1363,8 @@ MonoBehaviour:
   BossSquare: {fileID: 6486144323645355046, guid: 6262e3c8bb5d80f418f7c15a9f5269b0,
     type: 3}
   NormalSquare: {fileID: 3373175357641023374, guid: df0279f0d26d6114aa4475ab5295b702,
+    type: 3}
+  betweenSquareGuide: {fileID: 5163023453874976819, guid: 7f624af60fe30fb4f9e2121c9b7147b4,
     type: 3}
   LoseSquareSprite: {fileID: 21300000, guid: 7b70054962f20a743ba19d4c92aecd7c, type: 3}
 --- !u!114 &1913183181
@@ -1437,6 +1439,7 @@ MonoBehaviour:
   DiceButton: {fileID: 781360474}
   BackButton: {fileID: 974493587}
   TrashButton: {fileID: 1032665640}
+  UseButton: {fileID: 0}
   Card1Button: {fileID: 0}
   Card2Button: {fileID: 0}
   Card3Button: {fileID: 0}

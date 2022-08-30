@@ -5,20 +5,25 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     List<int> cards;
-    int nowSquareId;
-    int nowLoop;
-    int movingDirection;
+    public int nowSquareId;
+    public int nowLoop;
+    public int movingDirection;
     int hp;
     int maxhp;
     int atk;
     int restTurn;//休み
     bool isMyTurn;
+    public bool isPushedChoiceWayButton;
+    bool needToChoiceWay;//道を選ぶ必要があるときにtrue、選ぶフェーズに入ったらfalseになる
     List<int> havingCard;
+    public List<GameObject> wayButtons;
     enum PlayerOperation
     {
         None,
         Dice,
-        Card
+        Card,
+        ChoiceWay,
+        Move
     }
     PlayerOperation myOpe=PlayerOperation.None;
     // Start is called before the first frame update
@@ -46,11 +51,29 @@ public class Player : MonoBehaviour
                 case PlayerOperation.Dice:
                     if (DiceView.Instance.GetDiceNumber() > 0)
                     {
-                        Move(DiceView.Instance.GetDiceNumber());
-                        print(DiceView.Instance.GetDiceNumber());
-                        isMyTurn = false;
-                        GameManager.Instance.NextPlayerTrun(); 
+                        if (needToChoiceWay)
+                        {
+                            needToChoiceWay = false;
+                            isPushedChoiceWayButton = false;
+                            myOpe = PlayerOperation.ChoiceWay;
+                            UIManager.Instance.SetChoiceWayButton(this);
+                        }
+                        else
+                        {
+                            myOpe = PlayerOperation.Move;
+                        }
                     }
+                    break;
+                case PlayerOperation.ChoiceWay:
+                    if (isPushedChoiceWayButton)
+                    {
+                        myOpe = PlayerOperation.Move;
+                    }
+                    break;
+                case PlayerOperation.Move:
+                    Move(DiceView.Instance.GetDiceNumber());
+                    DiceView.Instance.EraceDice();
+                    TurnEnd();
                     break;
             }
         }
@@ -71,6 +94,7 @@ public class Player : MonoBehaviour
                 CardSelecter.Instance.SelectCardByDeck();
                 break;
         }
+        //ここに敵やプレイヤーとぶつかったなど
     }
     public void SetFirstStatus(int hp,int atk)
     {
@@ -78,14 +102,18 @@ public class Player : MonoBehaviour
         this.hp = hp;
         this.atk = atk;
     }
-    public void MyTurn()
+    public void TurnStart()
     {
         isMyTurn = true;
         myOpe = PlayerOperation.None;
-        if(restTurn>0)
+        if (CheckNeedToChoiceWay())
+        {
+            needToChoiceWay = true;
+        }
+        if (restTurn>0)
         {
             restTurn--;
-            GameManager.Instance.NextPlayerTrun();
+            TurnEnd();
         }
     }
     public void DiceRoll()
@@ -100,5 +128,23 @@ public class Player : MonoBehaviour
     public void DecideMovingWay()
     {
 
+    }
+    private void TurnEnd()
+    {
+        isMyTurn = false;
+        print("turnend");
+        GameManager.Instance.NextPlayerTrun();
+    }
+    private bool CheckNeedToChoiceWay()
+    {
+        switch (GameMap.Instance.GetSquareById(nowSquareId).species)
+        {
+            case GameMap.SquareSpecies.Start:
+                return true;
+            case GameMap.SquareSpecies.Cross:
+                return true;
+            default:
+                return false;
+        }
     }
 }

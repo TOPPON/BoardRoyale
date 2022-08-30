@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        GameStart();
+        Invoke(nameof(GameStart), 0.5f);
     }
     public void GameStart()
     {
@@ -50,6 +50,7 @@ public class GameManager : MonoBehaviour
     }
     public void NextPlayerTrun()
     {
+        print("NextPlayer");
         int nextPlayerIndex = players.IndexOf(nowPlayer) + 1;
         if (nextPlayerIndex >= players.Count)
         {
@@ -57,7 +58,8 @@ public class GameManager : MonoBehaviour
             gameTurn++;
         }
         nowPlayer = players[nextPlayerIndex];
-        nowPlayer.MyTurn();
+        nowPlayer.TurnStart();
+        UIManager.Instance.TurnStart();
         UIManager.Instance.AttachOperationButton(nowPlayer);
         //UIなどもここに入れる(○○のターン！みたいな)
     }

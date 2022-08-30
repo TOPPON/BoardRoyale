@@ -48,9 +48,12 @@ public class DiceView : MonoBehaviour
     {
         if (rolling == false)
         {
-            gameObject.GetComponent<Image>().enabled = false;
             return diceNumber;
         }
         else return 0;
+    }
+    public void EraceDice()
+    {
+        gameObject.GetComponent<Image>().enabled = false;
     }
 }
