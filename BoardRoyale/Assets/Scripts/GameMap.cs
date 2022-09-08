@@ -208,7 +208,8 @@ public class GameMap : MonoBehaviour
     }
     public void LoseSquare(int loopId, int squareId)
     {
-        if (GetSquareById(squareId).species == SquareSpecies.Cross || GetSquareById(squareId).species == SquareSpecies.Start) return;
+        if (GetSquareById(squareId).species == SquareSpecies.Cross || GetSquareById(squareId).species == SquareSpecies.Start|| GetSquareById(squareId).species == SquareSpecies.Boss) return;
+        //誰かほかの人がいた時の処理
         switch (loopId)
         {
             case 1:
@@ -218,6 +219,8 @@ public class GameMap : MonoBehaviour
                 loop2.Remove(squareId);
                 break;
         }
+        MapView.Instance.LoseSquare(squareId);
+        print("GameMap.LoseSquare" +loopId+":"+ squareId);
     }
     public MapSquare GetSquareById(int squareId)
     {
@@ -262,6 +265,7 @@ public class GameMap : MonoBehaviour
         if (GetSquareById(squareId2).cross.cross1squareId == squareId1 || GetSquareById(squareId2).cross.cross2squareId == squareId1) return true;
         else
         {
+            print(squareId1 + ":" + squareId2);
             print("err!!!!!!!!!!!!!!GameMap.IsSameSquare!!!!!");
             return false;
         }

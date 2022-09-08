@@ -1421,7 +1421,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameTurn: 0
   nowPlayer: {fileID: 0}
+  isAppearBoss: 0
   PlayerPrefab: {fileID: 6322993343812577499, guid: c8a7de2097848b44886c9ef410e6d2e5,
+    type: 3}
+  BossPrefab: {fileID: 4099109982032869467, guid: 5dce1334fe326ee48b15672e9aa77306,
     type: 3}
 --- !u!114 &1913183185
 MonoBehaviour:

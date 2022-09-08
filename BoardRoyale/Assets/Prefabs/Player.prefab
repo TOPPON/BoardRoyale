@@ -229,12 +229,12 @@ GameObject:
   m_Component:
   - component: {fileID: 918869254193247253}
   m_Layer: 5
-  m_Name: GameObject
+  m_Name: WayButton1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &918869254193247253
 RectTransform:
   m_ObjectHideFlags: 0
@@ -485,12 +485,12 @@ GameObject:
   m_Component:
   - component: {fileID: 8706849805526733415}
   m_Layer: 5
-  m_Name: GameObject (1)
+  m_Name: WayButton2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8706849805526733415
 RectTransform:
   m_ObjectHideFlags: 0
@@ -521,12 +521,12 @@ GameObject:
   m_Component:
   - component: {fileID: 2077424666692945502}
   m_Layer: 5
-  m_Name: GameObject (3)
+  m_Name: WayButton4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2077424666692945502
 RectTransform:
   m_ObjectHideFlags: 0
@@ -791,12 +791,12 @@ GameObject:
   m_Component:
   - component: {fileID: 3980603055927949757}
   m_Layer: 5
-  m_Name: GameObject (2)
+  m_Name: WayButton3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3980603055927949757
 RectTransform:
   m_ObjectHideFlags: 0

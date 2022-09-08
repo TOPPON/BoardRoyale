@@ -6,10 +6,12 @@ using System;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    List<Player> players=new List<Player>();
+    List<Character> characters=new List<Character>();
     public int gameTurn;
-    public Player nowPlayer;
+    public Character nowPlayer;
+    public bool isAppearBoss;
     [SerializeField] GameObject PlayerPrefab;
+    [SerializeField] GameObject BossPrefab;
     public class GameSettings
     {
         public int playerNum;
@@ -30,18 +32,20 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
         Invoke(nameof(GameStart), 0.5f);
+        Invoke(nameof(AppearBoss), 0.5f);
     }
     public void GameStart()
     {
         for (int i=0;i<gameSettings.playerNum; i++)
         {
             GameObject obj=Instantiate(PlayerPrefab);
-            players.Add(obj.GetComponent<Player>());
-            players[i].SetFirstStatus(gameSettings.defaulthp, 1);
+            characters.Add(obj.GetComponent<Player>());
+            characters[i].SetFirstStatus(gameSettings.defaulthp, 1);
         }
-        nowPlayer = players[players.Count-1];
+        nowPlayer = characters[characters.Count-1];
         gameTurn=1;
         NextPlayerTrun();
+        isAppearBoss = false;
     }
     // Update is called once per frame
     void Update()
@@ -50,24 +54,51 @@ public class GameManager : MonoBehaviour
     }
     public void NextPlayerTrun()
     {
-        print("NextPlayer");
-        int nextPlayerIndex = players.IndexOf(nowPlayer) + 1;
-        if (nextPlayerIndex >= players.Count)
+        int nextPlayerIndex = characters.IndexOf(nowPlayer) + 1;
+        if (nextPlayerIndex >= characters.Count)
         {
             nextPlayerIndex = 0;
             gameTurn++;
         }
-        nowPlayer = players[nextPlayerIndex];
+        nowPlayer = characters[nextPlayerIndex];
         nowPlayer.TurnStart();
         UIManager.Instance.TurnStart();
-        UIManager.Instance.AttachOperationButton(nowPlayer);
+        //もしボスじゃなかったら、みたいなのをいれる
+        if (nowPlayer.GetType() == typeof(Player))
+        {
+            UIManager.Instance.AttachOperationButton((Player)nowPlayer);
+        }
         //UIなどもここに入れる(○○のターン！みたいな)
     }
     public void ArriveBossSquare()//現在のプレイヤーがボスマスに到着した
     {
+        if (isAppearBoss)
+        {
+
+        }
+        else
+        {
+            AppearBoss();
+        }
     }
     public void AppearBoss()
     {
-        //players.Add(Boss)
+        GameObject obj = Instantiate(BossPrefab);
+        characters.Add(obj.GetComponent<Character>());
+        obj.GetComponent<Character>().SetFirstStatus(gameSettings.defaulthp, 2);
+        isAppearBoss = true;
+    }
+    public List<Character> GetCharactersBySquareId(int squareId)
+    {
+        List<Character> aSquareCharacters = new List<Character>();
+        foreach(Character chara in characters)
+        {
+            if (GameMap.Instance.IsSameSquare(chara.nowSquareId, squareId))
+            {
+                aSquareCharacters.Add(chara);
+                continue;
+            }
+        }
+        return aSquareCharacters;
     }
 }

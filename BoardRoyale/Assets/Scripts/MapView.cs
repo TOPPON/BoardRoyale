@@ -407,7 +407,8 @@ public class MapView : MonoBehaviour
     }
     public void LoseSquare(int squareId)
     {
-
+        MapSquares[squareId].SetActive(false);
+        print("MapView.LoseSquare" + squareId);
     }
     void SetCrossMarkAll()
     {

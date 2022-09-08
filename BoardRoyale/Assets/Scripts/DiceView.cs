@@ -37,7 +37,7 @@ public class DiceView : MonoBehaviour
                 gameObject.GetComponent<Image>().sprite = diceImages[diceNumber - 1];
             }
             timer += Time.deltaTime;
-            if (timer > 1)
+            if (timer > 0.3f)
             {
                 rolling = false;
             }

@@ -2,17 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : Character
 {
     List<int> cards;
-    public int nowSquareId;
-    public int nowLoop;
-    public int movingDirection;
-    int hp;
-    int maxhp;
-    int atk;
-    int restTurn;//休み
-    bool isMyTurn;
     public bool isPushedChoiceWayButton;
     bool needToChoiceWay;//道を選ぶ必要があるときにtrue、選ぶフェーズに入ったらfalseになる
     List<int> havingCard;
@@ -93,27 +85,20 @@ public class Player : MonoBehaviour
             case GameMap.SquareSpecies.Card:
                 CardSelecter.Instance.SelectCardByDeck();
                 break;
+            case GameMap.SquareSpecies.Boss:
+                GameManager.Instance.ArriveBossSquare();
+                break;
         }
         //ここに敵やプレイヤーとぶつかったなど
     }
-    public void SetFirstStatus(int hp,int atk)
+
+    public override void TurnStart()
     {
-        maxhp = hp;
-        this.hp = hp;
-        this.atk = atk;
-    }
-    public void TurnStart()
-    {
-        isMyTurn = true;
+        base.TurnStart();
         myOpe = PlayerOperation.None;
         if (CheckNeedToChoiceWay())
         {
             needToChoiceWay = true;
-        }
-        if (restTurn>0)
-        {
-            restTurn--;
-            TurnEnd();
         }
     }
     public void DiceRoll()
@@ -124,16 +109,6 @@ public class Player : MonoBehaviour
     public void SeeCard()
     {
 
-    }
-    public void DecideMovingWay()
-    {
-
-    }
-    private void TurnEnd()
-    {
-        isMyTurn = false;
-        print("turnend");
-        GameManager.Instance.NextPlayerTrun();
     }
     private bool CheckNeedToChoiceWay()
     {
