@@ -265,8 +265,6 @@ public class GameMap : MonoBehaviour
         if (GetSquareById(squareId2).cross.cross1squareId == squareId1 || GetSquareById(squareId2).cross.cross2squareId == squareId1) return true;
         else
         {
-            print(squareId1 + ":" + squareId2);
-            print("err!!!!!!!!!!!!!!GameMap.IsSameSquare!!!!!");
             return false;
         }
     }

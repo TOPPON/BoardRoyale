@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
         Invoke(nameof(GameStart), 0.5f);
-        Invoke(nameof(AppearBoss), 0.5f);
+        //Invoke(nameof(AppearBoss), 0.5f);
     }
     public void GameStart()
     {

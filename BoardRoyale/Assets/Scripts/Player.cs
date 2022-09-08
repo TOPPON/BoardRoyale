@@ -15,9 +15,10 @@ public class Player : Character
         Dice,
         Card,
         ChoiceWay,
-        Move
+        Move,
+        Attack
     }
-    PlayerOperation myOpe=PlayerOperation.None;
+    PlayerOperation myOpe = PlayerOperation.None;
     // Start is called before the first frame update
     void Start()
     {
@@ -65,6 +66,10 @@ public class Player : Character
                 case PlayerOperation.Move:
                     Move(DiceView.Instance.GetDiceNumber());
                     DiceView.Instance.EraceDice();
+                    myOpe = PlayerOperation.Attack;
+                    break;
+                case PlayerOperation.Attack:
+                    SameSquareAttack();
                     TurnEnd();
                     break;
             }
@@ -74,7 +79,7 @@ public class Player : Character
     {
         for (int i = 0; i < squares; i++)
         {
-            nowSquareId=GameMap.Instance.GetnextSquare(nowLoop, nowSquareId, movingDirection);
+            nowSquareId = GameMap.Instance.GetnextSquare(nowLoop, nowSquareId, movingDirection);
         }
         gameObject.transform.position = MapView.Instance.GetPlayerPositionById(nowSquareId);
         switch (GameMap.Instance.GetSquareById(nowSquareId).species)

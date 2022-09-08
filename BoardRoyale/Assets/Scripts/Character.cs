@@ -51,4 +51,19 @@ public class Character : MonoBehaviour
             print("dead!");
         }
     }
+    public int GetAtk()
+    {
+        return atk;
+    }
+    protected void SameSquareAttack() {
+        List<Character> sameSquarePlayers = GameManager.Instance.GetCharactersBySquareId(nowSquareId);
+        foreach (Character chara in sameSquarePlayers)
+        {
+            if (chara != this)
+            {
+                chara.ReceiveDamage(atk);
+                ReceiveDamage(chara.GetAtk());
+            }
+        }
+    }
 }

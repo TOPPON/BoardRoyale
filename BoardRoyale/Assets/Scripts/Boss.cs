@@ -8,7 +8,8 @@ public class Boss : Character
     {
         None,
         Move,
-        Act
+        Act,
+        Attack
     }
     BossOperation bossOpe;
     // Start is called before the first frame update
@@ -33,8 +34,6 @@ public class Boss : Character
                     bossOpe = BossOperation.Move;
                     break;
                 case BossOperation.Move:
-                    //同じマスに誰かがいた時の処理
-
                     //動く方向決め
                     if (GameMap.Instance.GetSquareById(nowSquareId).species == GameMap.SquareSpecies.Cross || GameMap.Instance.GetSquareById(nowSquareId).species == GameMap.SquareSpecies.Start)
                     {
@@ -64,10 +63,14 @@ public class Boss : Character
                         nowSquareId = GameMap.Instance.GetnextSquare(nowLoop, nowSquareId, movingDirection);
                     }
                     gameObject.transform.position = MapView.Instance.GetPlayerPositionById(nowSquareId);
-                    TurnEnd();
+                    bossOpe = BossOperation.Attack;
                     break;
                 case BossOperation.Act:
-
+                    //ランダムでカードみたいな行動をさせたいが未定
+                    break;
+                case BossOperation.Attack:
+                    SameSquareAttack();
+                    TurnEnd();
                     break;
             }
         }
