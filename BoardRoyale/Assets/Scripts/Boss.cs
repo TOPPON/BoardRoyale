@@ -4,10 +4,18 @@ using UnityEngine;
 
 public class Boss : Character
 {
+    int hpBonus;
+    int atkBonus;
+    int moveCount;
+    float opeTimer;
+    bool firstTurn;
     enum BossOperation
     {
         None,
+        BeforeMoveCheck,
         Move,
+        MovingAnimation,
+        MoveFinish,
         Act,
         Attack
     }
@@ -15,10 +23,10 @@ public class Boss : Character
     // Start is called before the first frame update
     void Start()
     {
-        movingDirection = Random.Range(0, 2) * 2 - 1; 
+        movingDirection = Random.Range(0, 2) * 2 - 1;
         nowLoop = 2;
         nowSquareId = 67;
-        gameObject.transform.position = MapView.Instance.GetPlayerPositionById(nowSquareId);
+        Invoke("SetCharacterPositionBynowSquareId", 0.05f);
     }
 
     // Update is called once per frame
@@ -30,10 +38,10 @@ public class Boss : Character
             {
                 case BossOperation.None:
                     //同じマスに誰かいたときにダメージを与えて動かす
-                    BossWakeAttack(atk);
-                    bossOpe = BossOperation.Move;
+                    if(!firstTurn) BossWakeAttack(atk);
+                    bossOpe = BossOperation.BeforeMoveCheck;
                     break;
-                case BossOperation.Move:
+                case BossOperation.BeforeMoveCheck:
                     //動く方向決め
                     if (GameMap.Instance.GetSquareById(nowSquareId).species == GameMap.SquareSpecies.Cross || GameMap.Instance.GetSquareById(nowSquareId).species == GameMap.SquareSpecies.Start)
                     {
@@ -57,13 +65,40 @@ public class Boss : Character
                         nowSquareId = GameMap.Instance.GetnextSquare(nowLoop, nowSquareId, movingDirection * -1);
                         GameMap.Instance.LoseSquare(nowLoop, tempSquareId);
                     }
-                    int dicenum = Random.Range(1,4);
-                    for (int i = 0; i < dicenum; i++)
+                    moveCount = Random.Range(1, 4);
+                    bossOpe = BossOperation.Move;
+                    break;
+                case BossOperation.Move:
+                    if (firstTurn) firstTurn = false;
+                    if (moveCount > 0)
                     {
                         nowSquareId = GameMap.Instance.GetnextSquare(nowLoop, nowSquareId, movingDirection);
+                        bossOpe = BossOperation.MovingAnimation;
+                        opeTimer = 0;
+                        moveCount--;
+                        SetCharacterPositionBynowSquareId();
                     }
-                    gameObject.transform.position = MapView.Instance.GetPlayerPositionById(nowSquareId);
-                    bossOpe = BossOperation.Attack;
+                    else
+                    {
+                        bossOpe = BossOperation.MoveFinish;
+                    }
+                    break;
+                case BossOperation.MovingAnimation:
+                    opeTimer += Time.deltaTime;
+                    if (opeTimer > 0.2f)
+                    {
+                        opeTimer = 0;
+                        bossOpe = BossOperation.Move;
+                    }
+                    break;
+                case BossOperation.MoveFinish:
+                    opeTimer += Time.deltaTime;
+                    if (opeTimer > 0.3f)
+                    {
+                        DiceView.Instance.EraceDice();
+                        bossOpe = BossOperation.Attack;
+                        opeTimer = 0;
+                    }
                     break;
                 case BossOperation.Act:
                     //ランダムでカードみたいな行動をさせたいが未定
@@ -75,6 +110,11 @@ public class Boss : Character
             }
         }
     }
+    public override int GetAtk()
+    {
+        if (!firstTurn) return atk;
+        return 0;
+    }
     public override void TurnStart()
     {
         base.TurnStart();
@@ -83,14 +123,40 @@ public class Boss : Character
     public void BossWakeAttack(int damage)
     {
         List<Character> sameSquarePlayers = GameManager.Instance.GetCharactersBySquareId(nowSquareId);
-        foreach(Character chara in sameSquarePlayers)
+        foreach (Character chara in sameSquarePlayers)
         {
             if (chara.GetType() == typeof(Player))
             {
                 chara.movingDirection = Random.Range(0, 2) * 2 - 1;
                 ((Player)chara).Move(1);
-                chara.ReceiveDamage(damage);
+                chara.ReceiveAttack(this, damage);
             }
         }
+    }
+    public void SetFirstStatus(int hp, int atk, int hpBonus, int atkBonus)
+    {
+        base.SetFirstStatus(hp, atk);
+        this.hpBonus = hpBonus;
+        this.atkBonus = atkBonus;
+        this.firstTurn = true;
+    }
+    protected override void SetCharacterPositionBynowSquareId()
+    {
+        gameObject.transform.position = MapView.Instance.GetPlayerPositionById(nowSquareId) + gapCenter;
+    }
+    public override int ReceiveAttack(Character attacker, int damage)
+    {
+        if (!firstTurn)
+        {
+            int result = base.ReceiveAttack(attacker, damage);
+            if (result == -1)
+            {
+                attacker.GetBonus(this.hpBonus, this.atkBonus);
+                //ボスを消す
+                GameManager.Instance.DefeatBoss();
+            }
+            return result;
+        }
+        return 0;
     }
 }

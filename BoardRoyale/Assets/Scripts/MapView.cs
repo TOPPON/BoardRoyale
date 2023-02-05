@@ -13,7 +13,7 @@ public class MapView : MonoBehaviour
     [SerializeField] GameObject betweenSquareGuide;
     [SerializeField] Sprite LoseSquareSprite;
     Vector3 squareExtRate = new Vector3(0.015f, -0.015f);
-    Vector3 squareOffset = new Vector3(-10, 4.5f);
+    Vector3 squareOffset = new Vector3(-8.3f, 4.0f);
 
     List<GameObject> MapSquares = new List<GameObject>();
     List<Vector3> SquarePositions = new List<Vector3>()
@@ -407,8 +407,15 @@ public class MapView : MonoBehaviour
     }
     public void LoseSquare(int squareId)
     {
-        MapSquares[squareId].SetActive(false);
-        print("MapView.LoseSquare" + squareId);
+        MapSquares[squareId].GetComponent<SquareView>().LoseSquare();
+    }
+    public void ShineSquare(int squareId)
+    {
+        MapSquares[squareId].GetComponent<SquareView>().ShiningStart();
+    }
+    public void StopShineSquare(int squareId)
+    {
+        MapSquares[squareId].GetComponent<SquareView>().ShiningStop();
     }
     void SetCrossMarkAll()
     {

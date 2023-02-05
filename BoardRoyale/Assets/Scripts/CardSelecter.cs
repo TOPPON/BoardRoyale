@@ -14,7 +14,7 @@ public class CardSelecter : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        for (int i = 0; i < 80; i++)
+        for (int i = 0; i < 26; i++)
         {
             Cards.Add(i);
         }
@@ -25,6 +25,10 @@ public class CardSelecter : MonoBehaviour
         int cardId = Cards[i];
         Cards.RemoveAt(i);
         return cardId;
+    }
+    public void ConsumeCard(int cardId)
+    {
+        Cards.Add(cardId-1);
     }
     // Update is called once per frame
     void Update()

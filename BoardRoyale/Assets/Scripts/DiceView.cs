@@ -34,10 +34,11 @@ public class DiceView : MonoBehaviour
             if((int)(timer*20)%10!= (int)((timer+Time.deltaTime) * 20) % 10)
             {
                 diceNumber = Random.Range(1, 6);
+                //diceNumber = 5;
                 gameObject.GetComponent<Image>().sprite = diceImages[diceNumber - 1];
             }
             timer += Time.deltaTime;
-            if (timer > 0.3f)
+            if (timer > 0.2f)
             {
                 rolling = false;
             }

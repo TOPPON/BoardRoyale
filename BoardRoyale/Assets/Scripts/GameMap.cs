@@ -7,6 +7,8 @@ public class GameMap : MonoBehaviour
     public static GameMap Instance;
     public List<int> loop1;
     public List<int> loop2;
+    public List<int> perloop1;
+    public List<int> perloop2;
     public enum SquareSpecies
     {
         Normal,
@@ -110,8 +112,16 @@ public class GameMap : MonoBehaviour
         }
         for (int i = 0; i < 82; i++)
         {
-            if(i<46)loop1.Add(i);
-            else loop2.Add(i);
+            if (i < 46)
+            {
+                perloop1.Add(i);
+                loop1.Add(i);
+            }
+            else
+            {
+                perloop2.Add(i);
+                loop2.Add(i);
+            }
             MapSquare tempSquare = new MapSquare();
             tempSquare.id = i;
             if (i == 1 || i == 7 || i == 10 || i == 14 || i == 17 || i == 21
@@ -220,7 +230,7 @@ public class GameMap : MonoBehaviour
                 break;
         }
         MapView.Instance.LoseSquare(squareId);
-        print("GameMap.LoseSquare" +loopId+":"+ squareId);
+        //print("GameMap.LoseSquare" +loopId+":"+ squareId);
     }
     public MapSquare GetSquareById(int squareId)
     {
@@ -237,7 +247,7 @@ public class GameMap : MonoBehaviour
                         if (loop1.Count <= loop1.BinarySearch(squareId) + 1) return loop1[0];
                         else return loop1[loop1.BinarySearch(squareId) + 1];
                     case -1:
-                        if (0 >= loop1.BinarySearch(squareId) - 1) return loop1[loop1.Count - 1];
+                        if (0 > loop1.BinarySearch(squareId) - 1) return loop1[loop1.Count - 1];
                         else return loop1[loop1.BinarySearch(squareId) - 1];
                 }
                 break;
@@ -248,11 +258,43 @@ public class GameMap : MonoBehaviour
                         if (loop2.Count <= loop2.BinarySearch(squareId) + 1) return loop2[0];
                         else return loop2[loop2.BinarySearch(squareId) + 1];
                     case -1:
-                        if (0 >= loop2.BinarySearch(squareId) - 1) return loop2[loop2.Count - 1];
+                        if (0 > loop2.BinarySearch(squareId) - 1) return loop2[loop2.Count - 1];
                         else return loop2[loop2.BinarySearch(squareId) - 1];
                 }
                 break;
         }
+        print("GetnextSquare ERROR!");
+        
+        return 0;
+    }
+    public int GetnextSquareWithLose(int loopId, int squareId, int moveDirection)
+    {
+        switch (loopId)
+        {
+            case 1:
+                switch (moveDirection)
+                {
+                    case 1:
+                        if (perloop1.Count <= perloop1.BinarySearch(squareId) + 1) return perloop1[0];
+                        else return perloop1[perloop1.BinarySearch(squareId) + 1];
+                    case -1:
+                        if (0 >= perloop1.BinarySearch(squareId) - 1) return perloop1[perloop1.Count - 1];
+                        else return perloop1[perloop1.BinarySearch(squareId) - 1];
+                }
+                break;
+            case 2:
+                switch (moveDirection)
+                {
+                    case 1:
+                        if (perloop2.Count <= perloop2.BinarySearch(squareId) + 1) return perloop2[0];
+                        else return perloop2[perloop2.BinarySearch(squareId) + 1];
+                    case -1:
+                        if (0 >= perloop2.BinarySearch(squareId) - 1) return perloop2[perloop2.Count - 1];
+                        else return perloop2[perloop2.BinarySearch(squareId) - 1];
+                }
+                break;
+        }
+        print("GetnextSquareWithLose ERROR!");
         return 0;
     }
     public bool IsSameSquare(int squareId1, int squareId2)
